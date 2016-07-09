@@ -110,13 +110,13 @@ public class XiuWeatherDB {
 	/**
 	 * 将Country实例存储到数据库。
 	 */
-	public void saveCountry(County county) {
+	public void saveCounty(County county) {
 		if (county != null) {
 			ContentValues values = new ContentValues();
-			values.put("country_name", county.getCountyName());
-			values.put("country_code", county.getCountyCode());
+			values.put("county_name", county.getCountyName());
+			values.put("county_code", county.getCountyCode());
 			values.put("city_id", county.getCityId());
-			db.insert("Country", null, values);
+			db.insert("County", null, values);
 		}
 	}
 
@@ -129,8 +129,8 @@ public class XiuWeatherDB {
 		if (cursor.moveToFirst()) {
 			do {
 				County county = new County();
-				county.setId(cursor.getInt(cursor.getColumnIndex("county_name")));
-				county.setCountyName(cursor.getString(cursor.getColumnIndex("county_code")));
+				county.setId(cursor.getInt(cursor.getColumnIndex("county_code")));
+				county.setCountyName(cursor.getString(cursor.getColumnIndex("county_name")));
 				county.setCityId(cityId);
 				list.add(county);
 			} while (cursor.moveToNext());
