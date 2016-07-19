@@ -24,6 +24,8 @@
             </intent-filter>
         </activity>
         <activity android:name="com.xiumixiu.xiuweather.activity.WeatherActivity"></activity>
-    </application>
+   		<service android:name="com.xiumixiu.xiuweather.service.AutoUpdateService"></service>
+   		<receiver android:name="com.xiumixiu.xiuweather.receiver.AutoUpdateReceiver"></receiver>
+        </application>
 
 </manifest>
