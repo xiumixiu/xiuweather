@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
@@ -54,6 +55,8 @@ public class WeatherActivity extends Activity implements OnClickListener {
 	 */
 	private Button refreshWeather;
 
+	private String TAG = "WeatherActivity";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,11 +76,13 @@ public class WeatherActivity extends Activity implements OnClickListener {
 		if (!TextUtils.isEmpty(countyCode)) {
 			// 有县级代号时就去查询天气
 			publishText.setText("同步中...");
+			Log.d(TAG, ".........countyCode = " + countyCode);
 			weatherInfoLayout.setVisibility(View.INVISIBLE);
 			cityNameText.setVisibility(View.INVISIBLE);
 			queryWeatherCode(countyCode);
 		} else {
 			// 没有县级代号时就直接显示本地天气
+			Log.d(TAG, "..showWeather..countyCode = " + countyCode);
 			showWeather();
 		}
 		switchCity.setOnClickListener(this);
@@ -133,6 +138,7 @@ public class WeatherActivity extends Activity implements OnClickListener {
 				if ("countyCode".equals(type)) {
 					if (!TextUtils.isEmpty(response)) {
 						// 从服务器返回的数据中解析出天气代号
+						Log.d(TAG, ".......response = " + response);
 						String[] array = response.split("\\|");
 						if (array != null && array.length == 2) {
 							String weatherCode = array[1];
@@ -155,7 +161,7 @@ public class WeatherActivity extends Activity implements OnClickListener {
 			@Override
 			public void onError(Exception e) {
 				runOnUiThread(new Runnable() {
-					
+
 					@Override
 					public void run() {
 						publishText.setText("同步失败");
@@ -164,16 +170,17 @@ public class WeatherActivity extends Activity implements OnClickListener {
 			}
 		});
 	}
+
 	/**
 	 * 从SharePreferences文件中读取存储的天气信息，并显示到界面上。
 	 */
-	private void showWeather(){
+	private void showWeather() {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		cityNameText.setText(prefs.getString("city_name", ""));
 		temp1Text.setText(prefs.getString("temp1", ""));
 		temp2Text.setText(prefs.getString("temp2", ""));
 		weatherDespText.setText(prefs.getString("weather_desp", ""));
-		publishText.setText("今天"+prefs.getString("publsh_time", "")+"发布");
+		publishText.setText("今天" + prefs.getString("publish_time", "") + "发布");
 		currentDateText.setText(prefs.getString("current_date", ""));
 		weatherInfoLayout.setVisibility(View.VISIBLE);
 	}
